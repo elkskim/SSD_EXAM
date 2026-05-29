@@ -1,0 +1,173 @@
+[
+  {
+    "Timestamp": "2026-05-19T18:18:07.9623487Z",
+    "Event": "USERLOGIN",
+    "Data": "User \u0027Alice\u0027 logged in.",
+    "PrevHash": "0",
+    "Hash": "6c0e3ec57ae303ace84c89a032ad0851515aaf681cb32c31cf2f7f5e87bfcef1",
+    "Hmac": "a63e1d2da561e6b1243dce29610c2d11fba50e2a5b6e57dd69e4e0b8198c3d2b",
+    "KeyVersion": 1
+  },
+  {
+    "Timestamp": "2026-05-19T18:18:08.0259182Z",
+    "Event": "FILE_ACCESSED",
+    "Data": "User \u0027Alice\u0027 accessed \u0027report.pdf\u0027.",
+    "PrevHash": "6c0e3ec57ae303ace84c89a032ad0851515aaf681cb32c31cf2f7f5e87bfcef1",
+    "Hash": "4055632bb5eb9dac499352cae2de4427f03023cd36b69f26ad674ce77539cfe3",
+    "Hmac": "93b3aa7caab00cde81b381c5af4308742fe8a1a4a8823eff7da1f219786dbd1d",
+    "KeyVersion": 1
+  },
+  {
+    "Timestamp": "2026-05-19T18:18:08.0264675Z",
+    "Event": "CONFIG_CHANGED",
+    "Data": "Setting: security_level changed from LOW to HIGH",
+    "PrevHash": "4055632bb5eb9dac499352cae2de4427f03023cd36b69f26ad674ce77539cfe3",
+    "Hash": "70fcf84034805b77c91f8fa7e56ba9a218cc133adc5f6866afad1a51699a5a47",
+    "Hmac": "550d3382f3f5bc9a85beb7cdef26cedbbe023c2d4391970332b0371d86b845d3",
+    "KeyVersion": 1
+  },
+  {
+    "Timestamp": "2026-05-20T13:23:18.8194646Z",
+    "Event": "USERLOGIN",
+    "Data": "User \u0027Alice\u0027 logged in.",
+    "PrevHash": "70fcf84034805b77c91f8fa7e56ba9a218cc133adc5f6866afad1a51699a5a47",
+    "Hash": "7071612b47eac08d6751f0fa2aa862b8e39c86129fcdda58aee2715c40e21195",
+    "Hmac": "0fff550b21bab189bf60e076c2c705274413533b84f18da4b1578a17a499f35f",
+    "KeyVersion": 1
+  },
+  {
+    "Timestamp": "2026-05-20T13:23:18.8547398Z",
+    "Event": "FILE_ACCESSED",
+    "Data": "User \u0027Alice\u0027 accessed \u0027report.pdf\u0027.",
+    "PrevHash": "7071612b47eac08d6751f0fa2aa862b8e39c86129fcdda58aee2715c40e21195",
+    "Hash": "f5273b7ec2879b35e0b7c668faf8e29f3667804750ebd3bc9806e6c0278b3ad1",
+    "Hmac": "78d61d8d62dc6a7d86ee8c9b6fa8da7920074a364da01f8fae98bac7e525d890",
+    "KeyVersion": 1
+  },
+  {
+    "Timestamp": "2026-05-20T13:23:18.8551697Z",
+    "Event": "CONFIG_CHANGED",
+    "Data": "Setting: security_level changed from LOW to HIGH",
+    "PrevHash": "f5273b7ec2879b35e0b7c668faf8e29f3667804750ebd3bc9806e6c0278b3ad1",
+    "Hash": "51f411a725c4a52c053b7e968e5d9cbcebb5b6df5a627f3c1e069d146b2353e4",
+    "Hmac": "c4ca8a971fec30a49b08406495b50b92f39d0f8b956ffc67d5c0028b24f2dba0",
+    "KeyVersion": 1
+  },
+  {
+    "Timestamp": "2026-05-20T14:55:56.9222747Z",
+    "Event": "USERLOGIN",
+    "Data": "User \u0027Alice\u0027 logged in.",
+    "PrevHash": "51f411a725c4a52c053b7e968e5d9cbcebb5b6df5a627f3c1e069d146b2353e4",
+    "Hash": "a013a533943afceb146d4bf26199511818684726065bd169091193d33d2c216a",
+    "Hmac": "6d64fb023684bc20a780fa64a6f00c37b32f0d6bc862b1e6dd909c584a08ddf0",
+    "KeyVersion": 1
+  },
+  {
+    "Timestamp": "2026-05-20T14:55:56.9572067Z",
+    "Event": "FILE_ACCESSED",
+    "Data": "User \u0027Alice\u0027 accessed \u0027report.pdf\u0027.",
+    "PrevHash": "a013a533943afceb146d4bf26199511818684726065bd169091193d33d2c216a",
+    "Hash": "39ff8284cf35960bbc036b303e1ffb2e83d589cdf917aba9a432dfe04cd2fce3",
+    "Hmac": "7f0064f142ff9c3ddff8ccc4ad0277305cc8a3554cb0ab6b87bec398547e47a3",
+    "KeyVersion": 1
+  },
+  {
+    "Timestamp": "2026-05-20T14:55:56.9577125Z",
+    "Event": "CONFIG_CHANGED",
+    "Data": "Setting: security_level changed from LOW to HIGH",
+    "PrevHash": "39ff8284cf35960bbc036b303e1ffb2e83d589cdf917aba9a432dfe04cd2fce3",
+    "Hash": "a76167a7732173006e963c68b941ff9343b484159415209ad045a49a95955af6",
+    "Hmac": "a0815d61358be6089f4213714e87b0c8aa71ea88b3de206b14368321df6c57e6",
+    "KeyVersion": 1
+  },
+  {
+    "Timestamp": "2026-05-20T15:43:53.0084673Z",
+    "Event": "USERLOGIN",
+    "Data": "User \u0027Alice\u0027 logged in.",
+    "PrevHash": "a76167a7732173006e963c68b941ff9343b484159415209ad045a49a95955af6",
+    "Hash": "2047d9d9c5c79476477d0e560ede8f5b4baa633487b0c2b302c3ae777600263d",
+    "Hmac": "7670dd4fe91fec49a218a1aeed754e0a579e741135e9415e34d545df265ef237",
+    "KeyVersion": 1
+  },
+  {
+    "Timestamp": "2026-05-20T15:43:53.044145Z",
+    "Event": "FILE_ACCESSED",
+    "Data": "User \u0027Alice\u0027 accessed \u0027report.pdf\u0027.",
+    "PrevHash": "2047d9d9c5c79476477d0e560ede8f5b4baa633487b0c2b302c3ae777600263d",
+    "Hash": "644208f27454cfe8973528a590753052ae78601631d95b134422d04395d91dd7",
+    "Hmac": "e5eb83dca10065008e6b26f706462fc91d56843ee18076137c9b0303d8d46bdd",
+    "KeyVersion": 1
+  },
+  {
+    "Timestamp": "2026-05-20T15:43:53.044808Z",
+    "Event": "CONFIG_CHANGED",
+    "Data": "Setting: security_level changed from LOW to HIGH",
+    "PrevHash": "644208f27454cfe8973528a590753052ae78601631d95b134422d04395d91dd7",
+    "Hash": "d06a55bbcd13327b61948ee50321c782f7cde045494cbca0728b6153f6ab67ff",
+    "Hmac": "bf89d2b8c58c76f45e3ea5e8f6dea473fc4b5576c58a96a98f68c8efc73ca8bc",
+    "KeyVersion": 1
+  },
+  {
+    "Timestamp": "2026-05-20T15:43:53.0637783Z",
+    "Event": "USERLOGIN",
+    "Data": "User \u0027Bob\u0027 logged in.",
+    "PrevHash": "d06a55bbcd13327b61948ee50321c782f7cde045494cbca0728b6153f6ab67ff",
+    "Hash": "054be97deba54a247d31091009810709b9b5f7bdd79c1c1ec64c2b6eb5a509dd",
+    "Hmac": "294e00b38c47f3e01151eec5cad62b8a500e8e6fcd5080123bf6c89a89f0b623",
+    "KeyVersion": 2
+  },
+  {
+    "Timestamp": "2026-05-20T15:43:53.0671855Z",
+    "Event": "PERMISSION_GRANT",
+    "Data": "User \u0027Bob\u0027 granted admin access.",
+    "PrevHash": "054be97deba54a247d31091009810709b9b5f7bdd79c1c1ec64c2b6eb5a509dd",
+    "Hash": "dfcec1a7191067dd50b260e51504b3271e69b826c05ff37bec13e130c9ea8e7f",
+    "Hmac": "b203b2d5752e5046f2ff8ec7e9c107ca6670b5a367bd3116b9e47c8d8193d86c",
+    "KeyVersion": 2
+  },
+  {
+    "Timestamp": "2026-05-20T16:06:17.7409507Z",
+    "Event": "USERLOGIN",
+    "Data": "User \u0027Alice\u0027 logged in.",
+    "PrevHash": "dfcec1a7191067dd50b260e51504b3271e69b826c05ff37bec13e130c9ea8e7f",
+    "Hash": "62ea38f54787cf85c4933d162985064cbbb122ded7856617a133a14e1bd54d27",
+    "Hmac": "54dad08d9894d92b982f6ed29ea53e98b11f5e7e0f6f954935429d9de333cf3e",
+    "KeyVersion": 1
+  },
+  {
+    "Timestamp": "2026-05-20T16:06:17.7695851Z",
+    "Event": "FILE_ACCESSED",
+    "Data": "User \u0027Alice\u0027 accessed \u0027report.pdf\u0027.",
+    "PrevHash": "62ea38f54787cf85c4933d162985064cbbb122ded7856617a133a14e1bd54d27",
+    "Hash": "ab634d0c98763d888d88fe0b640c4b7ff5b7c30c1523e660afd65ade17dbcbc3",
+    "Hmac": "b7f66806efaccf80eb0776445201c3dd04ce10c14f88a6348d4ac3d3c175ce47",
+    "KeyVersion": 1
+  },
+  {
+    "Timestamp": "2026-05-20T16:06:17.7699706Z",
+    "Event": "CONFIG_CHANGED",
+    "Data": "Setting: security_level changed from LOW to HIGH",
+    "PrevHash": "ab634d0c98763d888d88fe0b640c4b7ff5b7c30c1523e660afd65ade17dbcbc3",
+    "Hash": "6ac989ca3103dc61121dfa33bd991544bb45c0d6cad73ad35a27efcbe59cc303",
+    "Hmac": "2237db45cd734d4ed23c5d3cc7b8dc43c7e1b6149985bd9bc3f8b29a6d4778f3",
+    "KeyVersion": 1
+  },
+  {
+    "Timestamp": "2026-05-20T16:06:17.7793304Z",
+    "Event": "USERLOGIN",
+    "Data": "User \u0027Bob\u0027 logged in.",
+    "PrevHash": "6ac989ca3103dc61121dfa33bd991544bb45c0d6cad73ad35a27efcbe59cc303",
+    "Hash": "b1adec68edc8065d9312d0fcad9d4c51ba751e7232db28b7068c3aa79db03be8",
+    "Hmac": "547b8f43f2eaa2722ed12e84c2a9bed2b683cba9f6198de87ac989ec48351dd9",
+    "KeyVersion": 2
+  },
+  {
+    "Timestamp": "2026-05-20T16:06:17.7798598Z",
+    "Event": "PERMISSION_GRANT",
+    "Data": "User \u0027Bob\u0027 granted admin access.",
+    "PrevHash": "b1adec68edc8065d9312d0fcad9d4c51ba751e7232db28b7068c3aa79db03be8",
+    "Hash": "d6ce7b278d91e1e13083c85eded9095b567cb616aa6bcd2827b516838d009772",
+    "Hmac": "c16335667297a8b554ea46a15078c572ec8d9fa1b18a21bd94f7d86b32cfd5ad",
+    "KeyVersion": 2
+  }
+]

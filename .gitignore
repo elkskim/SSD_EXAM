@@ -1,0 +1,29 @@
+# Build and dependencies
+bin/
+obj/
+*.dll
+*.exe
+*.pdb
+*.runtimeconfig.json
+*.deps.json
+
+# IDE
+.rider/
+.idea/
+*.sln.iml
+
+# Documentation/Report (keep locally, don't push)
+Documents/
+
+# Build artifacts
+*.cache
+*.nuget.cache
+*.nuget.props
+*.nuget.targets
+*.nuget.dgspec.json
+
+# Misc
+*.json.bak
+nul
+output.txt
+
