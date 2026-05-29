@@ -1,5 +1,5 @@
-## SSD EXAM project n tech report
-# hvordan virkerd?
+# SSD EXAM project n tech report
+## hvordan virkerd?
 
 jamen det er et stort fedt audit log audit system.
 vi tjekker at logs er signed, sealed, delivered, og at alt stemmer overens når vi får kastet en log i hovedet.
