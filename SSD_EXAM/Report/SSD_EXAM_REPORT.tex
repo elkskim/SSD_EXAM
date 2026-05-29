@@ -125,7 +125,7 @@ Arkitekturen er bygget omkring princippet om append-only logs med kryptografisk 
 
 % Data flow legend
 \node[anchor=west] at (0, -1.2) {
-    \small \textit{Data flows: AuditLog coordmates signing and storage, LogVerifier verifies integrity against stored logs}
+    \small \textit{Data flow: AuditLog koordinerer signing og storage, LogVerifier verificerer integritet mod logs i storage.}
 };
 
 \end{tikzpicture}
@@ -134,10 +134,10 @@ Arkitekturen er bygget omkring princippet om append-only logs med kryptografisk 
 \subsection{Komponenter}
 
 \subsubsection{AuditLog (Kerne)}
-Hovedklassen som håndterer oprettelse af nye log entries. Den koordinerer med KeyManager for at signere entries og sender dem til JsonLogStorage for persistering. Hver entry linkes til den forrige gennem hash-værdier.
+Hovedklassen som håndterer oprettelse af nye log entries. Den koordinerer med KeyManager for at sign entries og sender dem til JsonLogStorage for persistence. Hver entry linkes til den forrige gennem hash-værdier.
 
 \subsubsection{KeyManager}
-Administrerer kryptografiske nøgler og deres versioner. Tillader nøglerotation uden at ødelægge verificering af ældre entries. Holder styr på hvilken nøgleversion hver entry blev signeret med.
+Administrerer kryptografiske nøgler og deres versioner. Tillader nøglerotation uden at ødelægge verificering af ældre entries. Holder styr på hvilken nøgleversion hver entry blev signed med.
 
 \subsubsection{LogVerifier}
 Verificerer integriteten af hele log-kæden. Gennemgår hver entry og kontrollerer:
@@ -148,7 +148,7 @@ Verificerer integriteten af hele log-kæden. Gennemgår hver entry og kontroller
 \end{itemize}
 
 \subsubsection{JsonLogStorage}
-Håndterer persistering af log entries til disk i JSON-format. Implementerer append-only principper og giver læseadgang til hele historien.
+Håndterer persistence af log entries til disk i JSON-format. Implementerer append-only principper og giver læseadgang til hele historien.
 
 % ============================================
 % DATAMODELLER
@@ -171,7 +171,7 @@ En \texttt{LogEntry} repræsenterer en enkelt hændelse i audit log-kæden:
     \item \textbf{PrevHash}: SHA256-hash af den forrige entry - danner kæden
     \item \textbf{Hash}: SHA256-hash af denne entry's indhold
     \item \textbf{Hmac}: HMAC-SHA256 signatur for autentificitet
-    \item \textbf{KeyVersion}: Hvilken nøgleversion blev brugt til at signere denne entry
+    \item \textbf{KeyVersion}: Hvilken nøgleversion blev brugt til at sign denne entry
 \end{itemize}
 
 \subsubsection{KeyVersion}
@@ -211,7 +211,7 @@ Projektet er implementeret i \textbf{C\# (.NET 9)} med følgende begrundelser:
 
 \begin{itemize}
     \item \textbf{System.Security.Cryptography}: Built-in kryptografisk bibliotek med SHA256 og HMAC-SHA256
-    \item \textbf{JSON-serialisering}: Læsbar persistering af entries til disk
+    \item \textbf{JSON-serialisering}: Læsbar persistence af entries til disk
     \item \textbf{Stærk typesikkerhed}: C\#'s typesystem opdager fejl ved compile-time
     \item \textbf{Exception handling}: Præcis fejlhåndtering gennem hele systemet
 \end{itemize}
@@ -253,9 +253,9 @@ Projektet er implementeret i \textbf{C\# (.NET 9)} med følgende begrundelser:
     \item Gamle nøgler gemmes for at verificere historiske entries
 \end{enumerate}
 
-\subsection{Lagring og Persistering}
+\subsection{Lagring og persistence}
 
-\texttt{JsonLogStorage} håndterer persistering:
+\texttt{JsonLogStorage} håndterer persistence:
 
 \begin{itemize}
     \item \textbf{Append-only}: Nye entries føjes til slutningen af JSON-fil
@@ -311,7 +311,7 @@ Demo-program (\texttt{Program.cs}) udfører følgende scenarier:
     \item \textbf{Opret initial log}: Flere normale entries tilføjes
     \item \textbf{Verificer initial log}: Alle entries skal være gyldige
     \item \textbf{Nøglerotation}: Ny nøgle introduceres
-    \item \textbf{Tilføj entries med ny nøgle}: Entries signeres med ny nøgle
+    \item \textbf{Tilføj entries med ny nøgle}: Entries bliver signed med ny nøgle
     \item \textbf{Verificer igen}: Hele kæde med blandet nøgleversioner skal være valid
     \item \textbf{Tampering-test}: Manipulér en entry og vis at verificering fejler
     \item \textbf{Rapportér resultater}: Detaljerede rapporter vises for hver test
@@ -339,7 +339,7 @@ Disse tests demonstrerer systemets evne til at:
     \item \texttt{AuditLogSystem/Core/CryptoUtil.cs} - Kryptografiske hjælpefunktioner (SHA256, HMAC)
     \item \texttt{AuditLogSystem/Verification/LogVerifier.cs} - Verificering af log-integritet
     \item \texttt{AuditLogSystem/Verification/VerificationReport.cs} - Detaljeret verificeringsrapport
-    \item \texttt{AuditLogSystem/Storage/JsonLogStorage.cs} - JSON-baseret persistering
+    \item \texttt{AuditLogSystem/Storage/JsonLogStorage.cs} - JSON-baseret persistence
     \item \texttt{Program.cs} - Demo-program der viser systemet i aktion
 \end{itemize}
 
@@ -405,10 +405,10 @@ Systemet opfylder sine kernekrav:
 
 \subsubsection{Begrænsninger}
 \begin{itemize}
-    \item Hvis krypteringsnøglen blir kompromitteret, kan nye entries forges
+    \item Hvis krypteringsnøglen bliver kompromitteret, kan nye entries forges
     \item Systemet beskytter ikke mod påtvunget sletning af hele log-filen
     \item Ingen redundans eller backup-mekanismer implementeret
-    \item Kræver sikker nøglestorage (uden for denne projects scope)
+    \item Kræver sikker nøglestorage (uden for dette projekts scope)
 \end{itemize}
 
 \subsection{Afsluttende Bemærkninger}
