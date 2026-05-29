@@ -157,13 +157,47 @@ Håndterer persistering af log entries til disk i JSON-format. Implementerer app
 \section{Datamodeller}
 
 \subsection{Primære Datastrukturer}
-[Beskriv datamodeller her]
 
-\subsubsection{Struktur 1}
-[Detaljer om struktur 1]
+Systemet arbejder med tre centrale datastrukturer: \texttt{LogEntry}, \texttt{KeyVersion}, og \texttt{VerificationReport}.
 
-\subsubsection{Struktur 2}
-[Detaljer om struktur 2]
+\subsubsection{LogEntry}
+
+En \texttt{LogEntry} repræsenterer en enkelt hændelse i audit log-kæden:
+
+\begin{itemize}
+    \item \textbf{Timestamp}: UTC-tid for når hændelsen blev registreret
+    \item \textbf{Event}: Streng der beskriver typen af hændelse (f.eks. ``USER\_LOGIN'', ``FILE\_MODIFIED'')
+    \item \textbf{Data}: Vilkårlig data forbundet med hændelsen
+    \item \textbf{PrevHash}: SHA256-hash af den forrige entry - danner kæden
+    \item \textbf{Hash}: SHA256-hash af denne entry's indhold
+    \item \textbf{Hmac}: HMAC-SHA256 signatur for autentificitet
+    \item \textbf{KeyVersion}: Hvilken nøgleversion blev brugt til at signere denne entry
+\end{itemize}
+
+\subsubsection{KeyVersion}
+
+Repræsenterer en kryptografisk nøgle og dens metadata:
+
+\begin{itemize}
+    \item \textbf{Version}: Numerisk identifikator (1, 2, 3, osv.)
+    \item \textbf{SecretKey}: Den faktiske hemmelighed brugt til HMAC
+    \item \textbf{CreatedAt}: Hvornår nøglen blev oprettet
+    \item \textbf{IsActive}: Om dette er den nuværende nøgle for nye entries
+\end{itemize}
+
+\subsubsection{VerificationReport}
+
+Detaljeret rapport fra verificering af log-integritet:
+
+\begin{itemize}
+    \item \textbf{IsValid}: Boolean - hele kæden gyldig?
+    \item \textbf{TotalEntries}: Antal entries der blev kontrolleret
+    \item \textbf{ValidEntries}: Hvor mange var gyldige
+    \item \textbf{InvalidEntries}: Hvor mange fejlede
+    \item \textbf{FirstInvalidEntryIndex}: Indeks på første fejl (hvis nogen)
+    \item \textbf{ErrorMessage}: Beskrivelse af hvad der gik galt
+    \item \textbf{VerificationTime}: Hvornår verificeringen blev udført
+\end{itemize}
 
 % ============================================
 % IMPLEMENTERING
@@ -172,19 +206,78 @@ Håndterer persistering af log entries til disk i JSON-format. Implementerer app
 \section{Implementering}
 
 \subsection{Teknologivalg}
-[Beskriv teknologi-valg her]
+
+Projektet er implementeret i \textbf{C\# (.NET 9)} med følgende begrundelser:
+
+\begin{itemize}
+    \item \textbf{System.Security.Cryptography}: Built-in kryptografisk bibliotek med SHA256 og HMAC-SHA256
+    \item \textbf{JSON-serialisering}: Læsbar persistering af entries til disk
+    \item \textbf{Stærk typesikkerhed}: C\#'s typesystem opdager fejl ved compile-time
+    \item \textbf{Exception handling}: Præcis fejlhåndtering gennem hele systemet
+\end{itemize}
 
 \subsection{Centrale Funktioner}
-[Beskriv hovedfunktioner her]
 
-\subsubsection{Funktion 1}
-[Detaljer om funktion 1]
+\subsubsection{Entry Appending}
 
-\subsubsection{Funktion 2}
-[Detaljer om funktion 2]
+\texttt{AuditLog.Append(event, data)} tilføjer en ny entry:
+\begin{enumerate}
+    \item Hent hash fra sidste entry (eller ``0'' hvis tom log)
+    \item Generer nuværende timestamp
+    \item Opbyg entry-indhold fra timestamp, event, data, prevHash
+    \item Beregn SHA256 af indhold
+    \item Beregn HMAC med aktiv nøgle
+    \item Opret LogEntry-objekt
+    \item Gem til disk via storage-interface
+\end{enumerate}
+
+\subsubsection{Integrity Verification}
+
+\texttt{LogVerifier.VerifyWithReport(entries)} verificerer hele kæden og rapporterer problemer:
+\begin{enumerate}
+    \item For hver entry: check at \texttt{prevHash} matcher forrige entries \texttt{hash}
+    \item Hent den korrekte nøgleversion baseret på entries \texttt{keyVersion}
+    \item Genberegn HMAC - skal matche lagret værdi
+    \item Genberegn SHA256-hash - skal matche lagret værdi
+    \item Hvis fejl findes: rapportér indeks og årsag
+    \item Returnér detaljeret rapport med statistik
+\end{enumerate}
+
+\subsubsection{Key Rotation}
+
+\texttt{KeyManager.RotateKey()} introducerer ny nøgle:
+\begin{enumerate}
+    \item Generer ny hemmelighed med \texttt{RandomNumberGenerator}
+    \item Gem ny nøgle med version nummer og timestamp
+    \item Markér som aktiv
+    \item Gamle nøgler gemmes for at verificere historiske entries
+\end{enumerate}
 
 \subsection{Lagring og Persistering}
-[Beskriv hvordan data lagres her]
+
+\texttt{JsonLogStorage} håndterer persistering:
+
+\begin{itemize}
+    \item \textbf{Append-only}: Nye entries føjes til slutningen af JSON-fil
+    \item \textbf{JSON-format}: Human-readable struktur gør manuel inspektion muligt
+    \item \textbf{Atomare operationer}: Hele lister skrives på én gang for consistency
+    \item \textbf{Deserialisering}: Læs entries fra disk og rekonstruer objekter
+\end{itemize}
+
+Eksempel på lagret JSON-struktur:
+\begin{lstlisting}
+[
+  {
+    "timestamp": "2026-05-29T22:30:00Z",
+    "event": "USER_LOGIN",
+    "data": "Admin login",
+    "prevHash": "0",
+    "hash": "a3f2e1c9...",
+    "hmac": "c5e9d1a2...",
+    "keyVersion": 1
+  }
+]
+\end{lstlisting}
 
 % ============================================
 % VERIFIKATION OG TEST
@@ -193,10 +286,43 @@ Håndterer persistering af log entries til disk i JSON-format. Implementerer app
 \section{Verifikation og Test}
 
 \subsection{Test-Strategi}
-[Beskriv test-strategi her]
+
+Systemet verificeres gennem tre lag:
+
+\begin{enumerate}
+    \item \textbf{Hash-kæde integritet}: Hver entry skal linke korrekt til den forrige
+    \item \textbf{HMAC autentificering}: Hver entry skal have gyldig signatur fra korrekt nøgle
+    \item \textbf{Hash konsistens}: Genberegnet SHA256 skal matche lagret værdi
+\end{enumerate}
+
+Hvis nogle af disse fejler, rapporteres:
+\begin{itemize}
+    \item Præcis hvilken entry fejlede
+    \item Hvilken check der fejlede (prevHash, HMAC, eller hash)
+    \item Hvornår fejlen blev detekteret
+    \item Samlet statistik over gyldige og ugyldige entries
+\end{itemize}
 
 \subsection{Demonstrativ Test}
-[Beskriv demo-eksempler her]
+
+Demo-program (\texttt{Program.cs}) udfører følgende scenarier:
+
+\begin{enumerate}
+    \item \textbf{Opret initial log}: Flere normale entries tilføjes
+    \item \textbf{Verificer initial log}: Alle entries skal være gyldige
+    \item \textbf{Nøglerotation}: Ny nøgle introduceres
+    \item \textbf{Tilføj entries med ny nøgle}: Entries signeres med ny nøgle
+    \item \textbf{Verificer igen}: Hele kæde med blandet nøgleversioner skal være valid
+    \item \textbf{Tampering-test}: Manipulér en entry og vis at verificering fejler
+    \item \textbf{Rapportér resultater}: Detaljerede rapporter vises for hver test
+\end{enumerate}
+
+Disse tests demonstrerer systemets evne til at:
+\begin{itemize}
+    \item Bevare integritet over lange perioder
+    \item Håndtere nøglerotation uden at miste verificering
+    \item Detektere enhver manipulation med præcision
+\end{itemize}
 
 % ============================================
 % KILDEKODE
@@ -205,14 +331,50 @@ Håndterer persistering af log entries til disk i JSON-format. Implementerer app
 \section{Kildekode-Oversigt}
 
 \subsection{Vigtige Filer}
+
 \begin{itemize}
-    \item \texttt{[Fil 1]} - [Beskrivelse]
-    \item \texttt{[Fil 2]} - [Beskrivelse]
-    \item \texttt{[Fil 3]} - [Beskrivelse]
+    \item \texttt{AuditLogSystem/Core/LogEntry.cs} - Datamodel for en log entry
+    \item \texttt{AuditLogSystem/Core/AuditLog.cs} - Hovedklasse for log-håndtering
+    \item \texttt{AuditLogSystem/Core/KeyManager.cs} - Nøgle- og versionshåndtering
+    \item \texttt{AuditLogSystem/Core/CryptoUtil.cs} - Kryptografiske hjælpefunktioner (SHA256, HMAC)
+    \item \texttt{AuditLogSystem/Verification/LogVerifier.cs} - Verificering af log-integritet
+    \item \texttt{AuditLogSystem/Verification/VerificationReport.cs} - Detaljeret verificeringsrapport
+    \item \texttt{AuditLogSystem/Storage/JsonLogStorage.cs} - JSON-baseret persistering
+    \item \texttt{Program.cs} - Demo-program der viser systemet i aktion
 \end{itemize}
 
-\subsection{Kodestuktur}
-[Beskriv mappestuktur og organisering her]
+\subsection{Mappestuktur}
+
+\begin{verbatim}
+SSD_EXAM/
+  AuditLogSystem/
+    Core/
+      AuditLog.cs
+      AuditLogException.cs
+      CryptoUtil.cs
+      KeyManager.cs
+      KeyVersion.cs
+      LogEntry.cs
+    Storage/
+      ILogStorage.cs
+      JsonLogStorage.cs
+    Verification/
+      LogVerifier.cs
+      VerificationReport.cs
+  Report/
+    SSD_EXAM_REPORT.tex
+  Program.cs
+  SSD_EXAM.csproj
+  audit_log.json
+\end{verbatim}
+
+\subsection{Designmønstre}
+
+\textbf{Dependency Injection}: \texttt{AuditLog} modtager \texttt{KeyManager} og \texttt{ILogStorage} via konstruktør, gør systemet modulært og testbart.
+
+\textbf{Strategy Pattern}: \texttt{ILogStorage} interface tillader forskellige lagringsimplementeringer uden at ændre kernalogin.
+
+\textbf{Immutable DataModels}: \texttt{LogEntry} har kun read-only properties, forhindrer uhørt modificering af historiske data.
 
 % ============================================
 % KONKLUSION
@@ -220,6 +382,47 @@ Håndterer persistering af log entries til disk i JSON-format. Implementerer app
 \newpage
 \section{Konklusion}
 
-[Skriv konklusion her]
+Dette projekt har demonstreret, hvordan man kan implementere et robust og tamper-evident audit log system ved hjælp af relativt simple kryptografiske primitiver.
+
+\subsection{Resultater}
+
+Systemet opfylder sine kernekrav:
+\begin{itemize}
+    \item \textbf{Integritet}: Hash-kæder sikrer, at enhver ændring af historiske data detekteres
+    \item \textbf{Autentificitet}: HMAC-signaturer beviser, at entries blev oprettet af systemet selv
+    \item \textbf{Nøglerotation}: Gamle entries forbliver verifiable, selvom nøgler roteres
+    \item \textbf{Transparens}: JSON-format gør det muligt at inspicere logs uden særlige værktøjer
+\end{itemize}
+
+\subsection{Sikkerhedsovervejelser}
+
+\subsubsection{Styrker}
+\begin{itemize}
+    \item Hash-kæder og HMAC er matematisk vellykkede mekanismer
+    \item Systemet detekterer tampering, sletning og forfalskelse
+    \item Nøglerotation uden at miste verificering af historiske data
+\end{itemize}
+
+\subsubsection{Begrænsninger}
+\begin{itemize}
+    \item Hvis krypteringsnøglen blir kompromitteret, kan nye entries forges
+    \item Systemet beskytter ikke mod påtvunget sletning af hele log-filen
+    \item Ingen redundans eller backup-mekanismer implementeret
+    \item Kræver sikker nøglestorage (uden for denne projects scope)
+\end{itemize}
+
+\subsection{Afsluttende Bemærkninger}
+
+Projektet viser, at ``Security by Design'' ikke nødvendigvis kræver kompleks kryptografi. Ved at kombinere velkendte primitiver (SHA256, HMAC) med god arkitektur (append-only logs, nøgleversioner) kan man opnå stærke sikkerhedsgarantier for audit logs.
+
+I en produktionsmiljø ville man skulle tilføje:
+\begin{itemize}
+    \item Sikker lagring af krypteringsnøgler (hardware security modules, key vaults)
+    \item Distribueret redundans af logs
+    \item Adgangskontrol til log-data
+    \item Compliance med GDPR, CRA og anden lovgivning
+\end{itemize}
+
+Denne implementation tjener som et solidt fundament for disse yderligere forbedringer.
 
 \end{document}
